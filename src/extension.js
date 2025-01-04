@@ -186,19 +186,19 @@ function getWebviewContent(data) {
                 }
 
                 h1 {
-                    font-size: 20px;
+                    font-size: 18px;
                     line-height: 1.2;
                     margin: 10px 0;
                 }
 
                 .summary-container {
-                    white-space: nowrap;
+                    white-space: pre-wrap;
                     height: auto;
                     background-color: rgba(255, 255, 255, 0.2);
                     backdrop-filter: blur(10px);
                     border-radius: 3px;
                     padding: 10px;
-                    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                    box-shadow: 6px 6px 2px 1px rgba(0, 0, 0, 0.2);
                     font-family: Courier New, sans-serif; /* Set desired font family */
                     font-size: 12px;
                     display: flex; /* Use flexbox for layout */
@@ -213,9 +213,9 @@ function getWebviewContent(data) {
                     backdrop-filter: blur(10px);
                     border-radius: 3px;
                     padding: 10px;
-                    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                    box-shadow: 6px 6px 2px 1px rgba(0, 0, 0, 0.2);
                     font-size: 12px;
-                    height: 200px;
+                    height: 250px;
                     overflow-y: auto;
                     resize: vertical;
                     scrollbar-color: rgba(255, 255, 255, 0.4) rgba(0, 0, 0, 0.1); /* Light thumb, dark track */
@@ -235,47 +235,114 @@ function getWebviewContent(data) {
                 #structure::-webkit-scrollbar-thumb {
                     background-color: rgba(255, 255, 255, 0.6); /* Transparent thumb */
                     border-radius: 10px; /* Rounded thumb corners */
-                    border: 2px solid rgba(255, 255, 255, 0.3); /* Light border to distinguish thumb */
+                    border: 1px solid rgba(255, 255, 255, 0); /* Light border to distinguish thumb */
                 }
 
                 #structure::-webkit-scrollbar-thumb:hover {
-                    background-color: rgba(255, 255, 255, 0.8); /* Slightly darker on hover */
+                    background-color: rgba(255, 255, 255, 0); /* Slightly darker on hover */
                 }
-
 
                 .summary-item {
-                    margin: 5px 0;
-                }
-
-                button svg {
-                    width: 16px;
-                    height: 16px;
+                    margin: 2px 0;
                 }
 
                 .timestamp {
                     font-size: 12px;
-                    color: #666;
-                    margin-top: 10px;
+                    color:rgba(255, 255, 255, 0.5);
+                    position: absolute;
+                    top: 5px; 
+                    right: 5px; 
+                    margin: 10px; 
                 }
+
+
+                .copy-button {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+
+                    width: auto;
+                    height: 32px;
+                    background-color: #25a400;
+                    color: rgb(250, 250, 250);
+                    border: none;
+                    border-radius: 1px;
+                    cursor: pointer;
+                    font-family: "Lato", serif;
+                    font-size: 12px;
+                    transition: background-color 0.4s, transform 0.2s;
+                    box-shadow: 4px 4px 2px 1px rgba(0, 0, 0, 0.2);
+                    vertical-align: middle;
+                }
+
+                .copy-button:hover {
+                    background-color:rgb(49, 190, 6) 
+                }
+
+                .copy-button:active {
+                    background-color:rgb(31, 110, 6); 
+                    transform: scale(0.98); /* Squeeze effect */
+                    box-shadow: 4px 4px 1px rgba(0, 0, 0, 0.15); /* Subtle shadow change */
+                }
+
+                .copy-icon {
+                    display: inline-block;
+                    vertical-align: middle;
+                }
+
             </style>
         </head>
+
+
         <body>
+
+            <div class="timestamp">Last Updated: ${new Date().toLocaleTimeString()}</div>
+
             <h1>Summary</h1>
             <div class="summary-container">
                 <div class="summary-item">Files analyzed: ${formatNumber(summary.fileCount)}</div>
                 <div class="summary-item">Size: ${formatSize(summary.totalSize)}</div>
-                <div class="summary-item">Estimated Tokens: ${formatNumber(summary.estimatedTokens)}</div>
+                <!--<div class="summary-item">Estimated Tokens: ${formatNumber(summary.estimatedTokens)}</div>-->
             </div>
 
             <h1>Directory Structure</h1>
             <pre id="structure">${structure}</pre>
 
-            <div class="timestamp">Updated ${new Date().toLocaleTimeString()}</div>
+            <button class="copy-button" onclick="copyText()">
+                <svg width="18px" height="18px" viewBox="-2.4 -2.4 28.80 28.80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                    <g id="SVGRepo_iconCarrier">
+                        <g id="Edit / Copy">
+                            <path id="Vector" d="M9 9V6.2002C9 5.08009 9 4.51962 9.21799 4.0918C9.40973 3.71547 9.71547 3.40973 10.0918 3.21799C10.5196 3 11.0801 3 12.2002 3H17.8002C18.9203 3 19.4801 3 19.9079 3.21799C20.2842 3.40973 20.5905 3.71547 20.7822 4.0918C21.0002 4.51962 21.0002 5.07967 21.0002 6.19978V11.7998C21.0002 12.9199 21.0002 13.48 20.7822 13.9078C20.5905 14.2841 20.2839 14.5905 19.9076 14.7822C19.4802 15 18.921 15 17.8031 15H15M9 9H6.2002C5.08009 9 4.51962 9 4.0918 9.21799C3.71547 9.40973 3.40973 9.71547 3.21799 10.0918C3 10.5196 3 11.0801 3 12.2002V17.8002C3 18.9203 3 19.4801 3.21799 19.9079C3.40973 20.2842 3.71547 20.5905 4.0918 20.7822C4.5192 21 5.07899 21 6.19691 21H11.8036C12.9215 21 13.4805 21 13.9079 20.7822C14.2842 20.5905 14.5905 20.2839 14.7822 19.9076C15 19.4802 15 18.921 15 17.8031V15M9 9H11.8002C12.9203 9 13.4801 9 13.9079 9.21799C14.2842 9.40973 14.5905 9.71547 14.7822 10.0918C15 10.5192 15 11.079 15 12.1969L15 15" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                        </g>
+                    </g>
+                </svg>
+                <span class="button-text">Copy&nbsp;</span>
+            </button>
+
+            <h1>Files Content</h1>
 
             <script>
-                function copyText() {
+                async function copyText() {
+                    const button = document.querySelector('.copy-button');
+                    const buttonText = button.querySelector('.button-text');
                     const text = document.getElementById('structure').textContent;
-                    navigator.clipboard.writeText(text);
+
+                    try {
+                        await navigator.clipboard.writeText(text);
+
+                        // Visual feedback
+                        buttonText.textContent = ' Copied! ';
+                        setTimeout(() => {
+                            buttonText.textContent = ' Copy ';
+                        }, 2000);
+                    } catch (err) {
+                        buttonText.textContent = ' Failed to copy ';
+                        setTimeout(() => {
+                            buttonText.textContent = ' Copy ';
+                        }, 2000);
+                    }
                 }
             </script>
         </body>
