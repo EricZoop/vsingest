@@ -1,0 +1,57 @@
+{
+  "name": "vsingest",
+  "displayName": "VSingest",
+  "description": "Get a prompt-friendly extract your Visual Studio codebase",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.96.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [],
+  "main": "./src/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "vsingest.showStructure",
+        "title": "Show Directory Structure"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "vsingestContainer",
+          "title": "VS Ingest",
+          "icon": "assets/chat.svg"
+        }
+      ]
+    },
+    "views": {
+      "vsingestContainer": [
+        {
+          "id": "vsingestView",
+          "name": "",
+          "type": "webview"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "pretest": "npm run lint",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.10",
+    "@types/node": "20.x",
+    "@types/vscode": "^1.96.0",
+    "@vscode/test-cli": "^0.0.10",
+    "@vscode/test-electron": "^2.4.1",
+    "eslint": "^9.16.0"
+  },
+  "dependencies": {
+    "gpt-tokenizer": "^2.8.1",
+    "tiktoken": "^1.0.18"
+  }
+}
