@@ -1,22 +1,33 @@
 {
   "name": "vsingest",
   "displayName": "VSingest",
-  "description": "Get a prompt-friendly extract your Visual Studio codebase",
-  "version": "0.0.1",
+  "description": "Transform any codebase or techstack in Visual Studio to prompt-friendly text for LLMs!",
+  "version": "0.0.2",
   "engines": {
     "vscode": "^1.96.0"
   },
+  "publisher": "EricZipor",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/EricZoop/vsingest"
+  },
+  "keywords": [
+    "ingestion",
+    "prompt-engineering",
+    "ai",
+    "tokenizer",
+    "tokenization"
+  ],
   "categories": [
     "Other"
   ],
+  "icon": "assets/logo_128x.png",
   "activationEvents": [],
   "main": "./src/extension.js",
   "contributes": {
     "commands": [
-      {
-        "command": "vsingest.showStructure",
-        "title": "Show Directory Structure"
-      }
+
     ],
     "viewsContainers": {
       "activitybar": [

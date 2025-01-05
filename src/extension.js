@@ -125,7 +125,7 @@ class DirectoryStructureProvider {
         }));
 
         const rootName = path.basename(workspaceRoot.fsPath);
-        let structure = `Directory structure:\n${rootName}/\n`;
+        let structure = `${rootName}/\n`;
 
         const tree = {};
         files.forEach(file => {
@@ -231,7 +231,7 @@ function getWebviewContent(data) {
                     padding: 10px;
                     box-shadow: 6px 6px 2px 1px rgba(0, 0, 0, 0.2);
                     font-size: 12px;
-                    max-height: 250px;
+                    height: 225px;
                     overflow-y: auto;
                     resize: vertical;
                     scrollbar-color: rgba(255, 255, 255, 0.4) rgba(0, 0, 0, 0.1);
@@ -267,7 +267,7 @@ function getWebviewContent(data) {
                     padding: 10px;
                     box-shadow: 6px 6px 2px 1px rgba(0, 0, 0, 0.2);
                     font-size: 12px;
-                    height: 250px;
+                    height: 275px;
                     overflow-y: auto;
                     resize: vertical;
                     scrollbar-color: rgba(255, 255, 255, 0.4) rgba(0, 0, 0, 0.1);
@@ -329,7 +329,7 @@ function getWebviewContent(data) {
 
                 .file-separator {
                     white-space: pre;
-                    color:rgb(255, 191, 0);
+                    color:rgba(60, 255, 0, 0.85);
                     margin: 0;
                     padding: 0;
                     font-family: 'Courier New', monospace;
@@ -368,7 +368,7 @@ function getWebviewContent(data) {
                 </svg>
             </button>${structure}</pre>
 
-            <h1>Content</h1>
+            <h1>File Details</h1>
 
             <div class="content-container">
                 <button class="copy-button" onclick="copyContent()">
@@ -384,7 +384,7 @@ function getWebviewContent(data) {
                     </svg>
                 </button>
             ${contents.map((file, index) => `
-                <div class="file-separator">${index === 0 ? '' : '\n'}================================================\nFile: ${file.path}\n================================================\n</div>
+                <div class="file-separator">${index === 0 ? '' : '\n'}====================================\nFile: ${file.path}\n====================================\n</div>
                 <div class="file-content">${file.content.trim()}</div>`).join('')}
 
            </div>
