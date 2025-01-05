@@ -94,7 +94,7 @@ class DirectoryStructureProvider {
         const workspaceRoot = vscode.workspace.workspaceFolders[0].uri;
         const files = await vscode.workspace.findFiles('**/*', '**/node_modules/**');
         const textFiles = files.filter(file => isTextFile(file.fsPath));
-        
+
         this.summaryInfo = {
             fileCount: textFiles.length,
             totalSize: 0,
@@ -107,10 +107,10 @@ class DirectoryStructureProvider {
                 const content = await fs.readFile(file.fsPath, 'utf-8');
                 const relativePath = path.relative(workspaceRoot.fsPath, file.fsPath);
                 const stat = await fs.stat(file.fsPath);
-                
+
                 this.summaryInfo.totalSize += stat.size;
                 this.summaryInfo.estimatedTokens += Math.ceil(content.length / 16);
-                
+
                 return {
                     path: relativePath,
                     content: this.escapeHtml(content)
@@ -182,6 +182,8 @@ function formatNumber(num) {
     return new Intl.NumberFormat().format(num);
 }
 
+
+
 function getWebviewContent(data) {
     const { structure, summary, contents } = data;
     return `<!DOCTYPE html>
@@ -229,7 +231,7 @@ function getWebviewContent(data) {
                     padding: 10px;
                     box-shadow: 6px 6px 2px 1px rgba(0, 0, 0, 0.2);
                     font-size: 12px;
-                    height: 250px;
+                    max-height: 250px;
                     overflow-y: auto;
                     resize: vertical;
                     scrollbar-color: rgba(255, 255, 255, 0.4) rgba(0, 0, 0, 0.1);
@@ -272,6 +274,7 @@ function getWebviewContent(data) {
                     margin: 0;
                     font-family: 'Courier New', monospace;
                     overflow-x: hidden; /* Hides the horizontal scrollbar */
+                    resize: vertical; /* Allows resizing both horizontally and vertically */
                 }
 
                 .content-container::-webkit-scrollbar {
@@ -324,7 +327,20 @@ function getWebviewContent(data) {
                     transform: translateY(-30px);
                 }
 
+                .file-separator {
+                    white-space: pre;
+                    color:rgb(255, 191, 0);
+                    margin: 0;
+                    padding: 0;
+                    font-family: 'Courier New', monospace;
+                }
 
+                .file-content {
+                    margin: 0;
+                    padding: 0;
+                    white-space: pre-wrap;
+                    word-wrap: break-word;
+                }
             </style>
         </head>
 
@@ -367,19 +383,68 @@ function getWebviewContent(data) {
                         </g>
                     </svg>
                 </button>
-                ${contents.map(file => `
-                    <div class="file-separator">
-================================================
-File: ${file.path}
-================================================
-                    </div>
-                    <div class="file-content">${file.content}</div>
-                `).join('\n')}
-            </div>
+            ${contents.map((file, index) => `
+                <div class="file-separator">${index === 0 ? '' : '\n'}================================================\nFile: ${file.path}\n================================================\n</div>
+                <div class="file-content">${file.content.trim()}</div>`).join('')}
+
+           </div>
 
             <div class="timestamp">Last Updated: ${new Date().toLocaleTimeString()}</div>
 
             <script>
+                window.addEventListener('DOMContentLoaded', (event) => {
+                    const container = document.querySelector('.content-container');
+                    if (container) {
+                        // Remove any whitespace nodes that are direct children of content-container
+                        container.childNodes.forEach(node => {
+                            if (node.nodeType === Node.TEXT_NODE && node.textContent.trim() === '') {
+                                node.remove();
+                            }
+                        });
+
+                        // Clean up any remaining whitespace between elements
+                        const elements = container.children;
+                        for (let elem of elements) {
+                            if (elem.classList.contains('file-content')) {
+                                elem.textContent = elem.textContent.trim();
+                            }
+                        }
+                    }
+                });
+
+                async function copyText() {
+                    try {
+                        // Get the content of the structure element
+                        const structureElement = document.getElementById('structure');
+                        
+                        // Create a temporary element to hold the structure content
+                        const tempElement = document.createElement('div');
+                        tempElement.innerHTML = structureElement.innerHTML;
+                        
+                        // Remove the button element from our temporary container
+                        const buttonElement = tempElement.querySelector('.copy-button');
+                        if (buttonElement) {
+                            buttonElement.remove();
+                        }
+                        
+                        // Get the cleaned text content
+                        const textToCopy = tempElement.textContent.trim();
+                        
+                        // Copy to clipboard
+                        await navigator.clipboard.writeText(textToCopy);
+                        
+                        // Visual feedback
+                        const button = document.querySelector('.copy-button');
+                        button.style.opacity = '0.5';
+                        setTimeout(() => {
+                            button.style.opacity = '1';
+                        }, 200);
+                        
+                    } catch (err) {
+                        console.error('Failed to copy text:', err);
+                    }
+                }
+
                 // Helper function to decode HTML entities when copying
                 function decodeHtml(html) {
                     const txt = document.createElement('textarea');
@@ -414,6 +479,8 @@ File: ${file.path}
                         console.error('Failed to copy content:', err);
                     }
                 }
+
+                
             </script>
         </body>
     </html>`;
