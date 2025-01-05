@@ -1,4 +1,8 @@
 # Visual Studio Ingest Extension
 ![Banner](assets/banner.png)
 
-Transform any codebase or techstack in Visual Studio to prompt-friendly text for LLMs!
+## *Transform any codebase or techstack in Visual Studio to prompt-friendly text for LLMs!*
+
+### Technology
+> tiktoken <br>
+> Node.js
