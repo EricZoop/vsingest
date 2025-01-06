@@ -2,7 +2,7 @@
   "name": "vsingest",
   "displayName": "VSingest",
   "description": "Transform any codebase or techstack in Visual Studio to prompt-friendly text for LLMs!",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "engines": {
     "vscode": "^1.96.0"
   },
@@ -13,16 +13,17 @@
     "url": "https://github.com/EricZoop/vsingest"
   },
   "keywords": [
-    "ingestion",
+    "ingest",
     "prompt-engineering",
     "ai",
-    "tokenizer",
-    "tokenization"
+    "token"
   ],
   "categories": [
-    "Other"
+    "AI",
+    "Visualization",
+    "Chat"
   ],
-  "icon": "assets/logo_128x.png",
+  "icon": "assets/logo_green.png",
   "activationEvents": [],
   "main": "./src/extension.js",
   "contributes": {
@@ -62,7 +63,6 @@
     "eslint": "^9.16.0"
   },
   "dependencies": {
-    "gpt-tokenizer": "^2.8.1",
     "tiktoken": "^1.0.18"
   }
 }
