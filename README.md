@@ -1,8 +1,7 @@
 # VSingest
-![Banner](assets/banner.png)
-## ***Transform any codebase or techstack in Visual Studio to prompt-friendly text for LLMs!***
 ![Demo](assets/demo.gif)
-### **[Download](https://marketplace.visualstudio.com/items?itemName=EricZipor.vsingest)** the extension within your Visual Studio environment. 
+## ***Transform any codebase or techstack in Visual Studio to prompt-friendly text for LLMs!***
+### **[>Download Here](https://marketplace.visualstudio.com/items?itemName=EricZipor.vsingest)**
 ### Overview:
 VSingest scans your opened project and generates well-structured text prompts that can be fed directly into LLMs for improved code generation, documentation, and AI-powered suggestions. 
   - Automatically converts code into AI-friendly prompts.
