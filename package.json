@@ -2,7 +2,7 @@
   "name": "vsingest",
   "displayName": "VSingest",
   "description": "Transform any codebase or techstack in Visual Studio to prompt-friendly text for LLMs!",
-  "version": "0.0.3",
+  "version": "0.0.6",
   "engines": {
     "vscode": "^1.96.0"
   },
@@ -16,7 +16,9 @@
     "ingest",
     "prompt-engineering",
     "ai",
-    "token"
+    "token",
+    "LLMs",
+    "git"
   ],
   "categories": [
     "AI",
@@ -24,6 +26,10 @@
     "Chat"
   ],
   "icon": "assets/logo_green.png",
+  "galleryBanner": {
+    "color": "#2a747f",
+    "theme": "light"
+  },
   "activationEvents": [],
   "main": "./src/extension.js",
   "contributes": {
@@ -34,7 +40,7 @@
       "activitybar": [
         {
           "id": "vsingestContainer",
-          "title": "VS Ingest",
+          "title": "VSingest",
           "icon": "assets/logo.svg"
         }
       ]

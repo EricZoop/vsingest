@@ -7,6 +7,7 @@ VSingest scans your opened project and generates structured text prompts that ca
   - Automatically converts code into optimized prompts.
   - Seamlessly integrates with your Visual Studio workflow.
   - Supports all programming languages.
+  - Compare token costs across models
 
 ### Technology
 > [Tailwind CSS](https://tailwindcss.com/) - Frontend <br> 
