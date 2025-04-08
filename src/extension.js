@@ -18,9 +18,73 @@ const textFileExtensions = new Set([
     '.csv', '.sql', '.graphql', '.prisma'
 ]);
 
+const modelRates = {
+    'openai-o1': { 
+        input: 15, 
+        output: 60,
+        unit: 'per 1M tokens'
+    },
+    'openai-o3-mini': { 
+        input: 1.10, 
+        output: 4.40,
+        unit: 'per 1M tokens'
+    },
+    'gpt-4o': { 
+        input: 5, 
+        output: 15,
+        unit: 'per 1M tokens'
+    },
+    'gpt-4-turbo': { 
+        input: 10, 
+        output: 30,
+        unit: 'per 1M tokens'
+    },
+    'gpt-3.5-turbo': { 
+        input: 0.5, 
+        output: 1.5,
+        unit: 'per 1M tokens'
+    },
+    'claude-3-opus': { 
+        input: 15, 
+        output: 75,
+        unit: 'per 1M tokens'
+    },
+    'claude-3-sonnet': { 
+        input: 3, 
+        output: 15,
+        unit: 'per 1M tokens'
+    },
+    'claude-3-haiku': { 
+        input: 0.25, 
+        output: 1.25,
+        unit: 'per 1M tokens'
+    },
+    'gemini-pro': { 
+        input: 2.5, 
+        output: 7.5,
+        unit: 'per 1M tokens'
+    },
+    'gemini-ultra': { 
+        input: 25, 
+        output: 75,
+        unit: 'per 1M tokens'
+    }
+};
+
 function isTextFile(filePath) {
     const ext = path.extname(filePath).toLowerCase();
     return textFileExtensions.has(ext);
+}
+
+function calculateTokenCost(tokens, modelName = null) {
+    // If no model is selected, return placeholder
+    if (!modelName) {
+        return '0';
+    }
+
+    const selectedModel = modelRates[modelName] || modelRates['claude-3-sonnet'];
+    const tokensInMillions = tokens / 1_000_000;
+    return (tokensInMillions * selectedModel.input).toFixed(6);
 }
 
 function activate(context) {
@@ -205,6 +269,27 @@ function getWebviewContent(data) {
                     margin: 10px 0;
                 }
 
+                .header-container {
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                }
+
+                .model-selector {
+                    font-family: "Inter", serif;
+                    padding: 3px;
+                    background-color: rgb(78, 85, 84);
+                    color: white;
+                    border: 1px solid #666;
+                    backdrop-filter: blur(1px);
+                    width: auto;
+                    box-shadow: 4px 4px 2px 1px rgba(0, 0, 0, 0.2);
+                }
+                .model-selector:focus option:checked {
+                    background-color: green;
+                    color: white;
+                }
+
                 .summary-container {
                     white-space: pre-wrap;
                     height: auto;
@@ -346,11 +431,26 @@ function getWebviewContent(data) {
 
         <body>
 
-            <h1>Summary</h1>
+            <div class="header-container">
+                <h1>Summary</h1>
+                <select id="modelSelector" class="model-selector">
+                    <option value="">Select Model</option>
+                    <option value="openai-o1">OpenAI o1</option>
+                    <option value="openai-o3-mini">OpenAI o3-mini</option>
+                    <option value="claude-3-sonnet">Claude 3 Sonnet</option>
+                    <option value="claude-3-opus">Claude 3 Opus</option>
+                    <option value="claude-3-haiku">Claude 3 Haiku</option>
+                    <option value="gpt-4o">GPT-4o</option>
+                    <option value="gpt-4-turbo">GPT-4 Turbo</option>
+                    <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
+                    <option value="gemini-pro">Gemini Pro</option>
+                </select>
+            </div>
             <div class="summary-container">
                 <div class="summary-item">Files analyzed: ${formatNumber(summary.fileCount)}</div>
                 <div class="summary-item">Size: ${formatSize(summary.totalSize)}</div>
                 <div class="summary-item">Estimated Tokens: ${formatNumber(summary.estimatedTokens)}</div>
+                <div class="summary-item" id="tokenCost">Cost: Select Model</div>
             </div>
 
             <h1>Directory Structure</h1>
@@ -480,6 +580,30 @@ function getWebviewContent(data) {
                     }
                 }
 
+                const modelRates = ${JSON.stringify(modelRates)};
+                const modelSelector = document.getElementById('modelSelector');
+                const tokenCostElement = document.getElementById('tokenCost');
+                const estimatedTokens = ${summary.estimatedTokens};
+
+                function calculateTokenCost(tokens, modelName) {
+                    // If no model is selected, return placeholder
+                    if (!modelName) {
+                        return '0';
+                    }
+
+                    const selectedModel = modelRates[modelName] || modelRates['claude-3-sonnet'];
+                    const tokensInMillions = tokens / 1_000_000;
+                    return (tokensInMillions * selectedModel.input).toFixed(6);
+                }
+
+                modelSelector.addEventListener('change', (e) => {
+                    const selectedModel = e.target.value;
+                    tokenCostElement.textContent = \`Estimated Cost: \${
+                        selectedModel 
+                            ? \`$\${calculateTokenCost(estimatedTokens, selectedModel)}\` 
+                            : '0'
+                    }\`;
+                });
                 
             </script>
         </body>
